@@ -7,10 +7,13 @@
     "target": "ES6",
     "allowJs": true,
     "noImplicitAny": true,
+    "resolveJsonModule": true,
+    "esModuleInterop": true,
     "moduleResolution": "node",
     "importHelpers": true,
     "isolatedModules": true,
 	"strictNullChecks": true,
+  
     "lib": [
       "DOM",
       "ES5",

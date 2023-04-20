@@ -1,6 +1,7 @@
 import { App, Notice, Plugin, PluginSettingTab, Setting } from 'obsidian';
 import { ExampleView, VIEW_TYPE_EXAMPLE } from "./view";
 import { SettingsTab } from "./settings";
+import plugin_config_data from  "./plugin_config_data.json"
 
 interface PluginSettings {
 	batch_create: string;
@@ -54,6 +55,8 @@ export default class ExamplePlugin extends Plugin {
 		});
 
 		console.log(this.app);
+		console.log(plugin_config_data);
+
 	}
 
 	async onunload() {
@@ -94,7 +97,16 @@ function batch_add(x: string, path: string): void {
 	let num: number = +x;
 
 	for(let i = 0; i < num; i++){
-		this.app.vault.create(path+"data_" + i + ".md", "");
+		this.app.vault.create(path+"data_" + i + ".md", ""); //create the file in the first input and then the contents of the file in the second input
 	}
 }
 
+function generate_file_name(date: Date, ): string{
+
+	return "";
+}
+
+function generate_file_data(): string{
+
+	return "";
+}
