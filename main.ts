@@ -3,28 +3,25 @@ import { ExampleView, VIEW_TYPE_EXAMPLE } from "./view";
 import { SettingsTab } from "./settings";
 
 interface PluginSettings {
-	batchAdd: string;
+	batch_create: string;
+	storage_folder: string;
 }
 
 const DEFAULT_SETTINGS: Partial<PluginSettings> = {
-	batchAdd: "31",
+	batch_create: "31",
+	storage_folder: "/"
 }
 
 export default class ExamplePlugin extends Plugin {
-
 	settings: PluginSettings;
 
 	async onload() { //add commands here as well
-
-
 		/* -------------------------------------------------------------------------- */
 		/*                                  settings                                  */
 		/* -------------------------------------------------------------------------- */
 
 		await this.loadSettings();
 		this.addSettingTab(new SettingsTab(this.app, this)); 
-
-
 
 		/* -------------------------------------------------------------------------- */
 		/*                                  page view                                 */
@@ -52,18 +49,11 @@ export default class ExamplePlugin extends Plugin {
 			id: "add-month",
 			name: "Batch add files",
 			callback: () => {
-				// batch_add();
-				// console.log(this.settings.batchAdd);
-				// console.log("test")
+				batch_add(this.settings.batch_create, this.settings.storage_folder);
 			}
 		});
 
-
-
-
-
-
-
+		console.log(this.app);
 	}
 
 	async onunload() {
@@ -76,7 +66,7 @@ export default class ExamplePlugin extends Plugin {
 	/* -------------------------------------------------------------------------- */
 
 	async loadSettings(){
-		this.loadSettings = Object.assign({}, DEFAULT_SETTINGS, await this.loadData());
+		this.settings = Object.assign({}, DEFAULT_SETTINGS, await this.loadData());
 	}
 
 	async saveSettings(){
@@ -93,14 +83,18 @@ export default class ExamplePlugin extends Plugin {
 			type: VIEW_TYPE_EXAMPLE,
 			active: true,
 		});
-
-		//   this.app.workspace.revealLeaf(
-		// 	this.app.workspace.getLeavesOfType(VIEW_TYPE_EXAMPLE)[0]
-		//   );
 	}
 }
 
 
-function batch_add(x: string): void {
-	console.log("batch of" + x +  "added");
+function batch_add(x: string, path: string): void {
+	
+	console.log("batch of " + x +  " files added");
+	console.log(path);
+	let num: number = +x;
+
+	for(let i = 0; i < num; i++){
+		this.app.vault.create(path+"data_" + i + ".md", "");
+	}
 }
+
