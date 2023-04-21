@@ -55,6 +55,8 @@ export default class ExamplePlugin extends Plugin {
 			name: "Batch add files",
 			callback: () => {
 				batch_add(this.settings.batch_create, this.settings.storage_folder, this.settings.creation_date, this.settings.days_covered);
+				let num: number = +this.settings.batch_create;
+				this.settings.days_covered += num*7;
 			}
 		});
 
