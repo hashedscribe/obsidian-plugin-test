@@ -1,16 +1,19 @@
 import { App, Notice, Plugin, PluginSettingTab, Setting } from 'obsidian';
 import { ExampleView, VIEW_TYPE_EXAMPLE } from "./view";
 import { SettingsTab } from "./settings";
-import plugin_config_data from  "./plugin_config_data.json"
+import moment from "moment";
 
 interface PluginSettings {
 	batch_create: string;
 	storage_folder: string;
+	creation_date: Date;
+	days_covered: number;
 }
 
 const DEFAULT_SETTINGS: Partial<PluginSettings> = {
 	batch_create: "31",
-	storage_folder: "/"
+	storage_folder: "/",
+	days_covered: 0,
 }
 
 export default class ExamplePlugin extends Plugin {
@@ -23,6 +26,7 @@ export default class ExamplePlugin extends Plugin {
 
 		await this.loadSettings();
 		this.addSettingTab(new SettingsTab(this.app, this)); 
+		this.settings.creation_date = new Date();
 
 		/* -------------------------------------------------------------------------- */
 		/*                                  page view                                 */
@@ -50,13 +54,12 @@ export default class ExamplePlugin extends Plugin {
 			id: "add-month",
 			name: "Batch add files",
 			callback: () => {
-				batch_add(this.settings.batch_create, this.settings.storage_folder);
+				batch_add(this.settings.batch_create, this.settings.storage_folder, this.settings.creation_date, this.settings.days_covered);
 			}
 		});
 
 		console.log(this.app);
-		console.log(plugin_config_data);
-
+		console.log(this.settings.creation_date);
 	}
 
 	async onunload() {
@@ -90,23 +93,29 @@ export default class ExamplePlugin extends Plugin {
 }
 
 
-function batch_add(x: string, path: string): void {
+function batch_add(x: string, path: string, creation_date: Date, days_covered: number): void {
 	
 	console.log("batch of " + x +  " files added");
 	console.log(path);
+
 	let num: number = +x;
 
+	console.log(num);
+
 	for(let i = 0; i < num; i++){
-		this.app.vault.create(path+"data_" + i + ".md", ""); //create the file in the first input and then the contents of the file in the second input
+		let newDate: Date = new Date(creation_date.getTime() + days_covered+(i*7) * (1000 * 60 * 60 * 24));
+		this.app.vault.create(path + generate_file_name(newDate, days_covered+(i*7)) + ".md", ""); //create the file in the first input and then the contents of the file in the second input
 	}
 }
 
-function generate_file_name(date: Date, ): string{
 
-	return "";
+function generate_file_name(date: Date, index: number): string{
+	return(index.toString() + "-" + (index+6).toString() + "_" + moment(date).format("YYYY-MM-DD"));
 }
 
 function generate_file_data(): string{
+
+
 
 	return "";
 }
