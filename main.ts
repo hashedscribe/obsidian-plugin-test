@@ -4,16 +4,27 @@ import { SettingsTab } from "./settings";
 import moment from "moment";
 
 interface PluginSettings {
+	//configurable settings
 	batch_create: string;
 	storage_folder: string;
+	time_format: string;
+
+
+	// plugin data
 	creation_date: Date;
 	days_covered: number;
 }
 
 const DEFAULT_SETTINGS: Partial<PluginSettings> = {
+	//configurable settings
 	batch_create: "31",
 	storage_folder: "/",
+	time_format: "military",
+
+
+	// plugin data
 	days_covered: 0,
+	
 }
 
 export default class ExamplePlugin extends Plugin {
@@ -96,13 +107,7 @@ export default class ExamplePlugin extends Plugin {
 
 
 function batch_add(x: string, path: string, creation_date: Date, days_covered: number): void {
-	
-	console.log("batch of " + x +  " files added");
-	console.log(path);
-
 	let num: number = +x;
-
-	console.log(num);
 
 	for(let i = 0; i < num; i++){
 		let newDate: Date = new Date(creation_date.getTime() + days_covered+(i*7) * (1000 * 60 * 60 * 24));
@@ -116,8 +121,23 @@ function generate_file_name(date: Date, index: number): string{
 }
 
 function generate_file_data(): string{
-
-
-
 	return "";
 }
+
+/*
+base:
+- time blocks
+- time blocks summed
+- missing values
+- notes
+- date
+
+
+built in daily fields:
+- day
+- row
+
+
+built in weekly fields
+
+*/
