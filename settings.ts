@@ -38,6 +38,11 @@ export class SettingsTab extends PluginSettingTab {
                 this.plugin.settings.storage_folder = value;
                 await this.plugin.saveSettings();
             })
-        )    
+        )
+        
+        new Setting(containerEl)
+        .setName("Days covered: ")
+        .setDesc(this.plugin.settings.days_covered.toString())
+
     }
 }
