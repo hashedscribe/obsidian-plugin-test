@@ -151,7 +151,7 @@ function batch_add(x: string, path: string, creation_date: Date, days_covered: n
 
 	for(let i = 0; i < num; i++){
 		let newDate: Date = new Date(creation_date.getTime() + days_covered+(i*7) * (1000 * 60 * 60 * 24));
-		this.app.vault.create(path + generate_file_name(newDate, days_covered+(i*7)) + ".md", generate_file_data(data_array_day, data_array_week)); //create the file in the first input and then the contents of the file in the second input
+		this.app.vault.create(path + generate_file_name(newDate, days_covered+(i*7)) + ".md", generate_file_data(data_array_day, data_array_week, newDate)); //create the file in the first input and then the contents of the file in the second input
 	}
 }
 
@@ -160,7 +160,7 @@ function generate_file_name(date: Date, index: number): string{
 	return(index.toString() + "-" + (index+6).toString() + "_" + moment(date).format("YYYY-MM-DD"));
 }
 
-function generate_file_data(data_array_day: string[], data_array_week: string[]): string{
+function generate_file_data(data_array_day: string[], data_array_week: string[], newDate: Date): string{
 	let return_string = "---\n"
 
 	//writing days
@@ -168,10 +168,13 @@ function generate_file_data(data_array_day: string[], data_array_week: string[])
 
 	for(let i = 0; i < 7; i++){
 		return_string = return_string + "- ";
+		//write base info (arrays)
 		for(let j = 0; j < data_array_day.length; j++){
-			return_string = return_string + data_array_day[j] + ": \n"
-			if(j < data_array_day.length-1){
-				return_string = return_string + "\t"
+			if(data_array_day[j] == "date"){
+				//generate iso date
+				return_string = return_string + data_array_day[j] + ": " + (new Date(newDate.getTime() + i *(1000 * 60 * 60 * 24))).toISOString().substring(0,10) + "\n"
+			}else{
+				return_string = return_string + "  " + data_array_day[j] + ": \n"
 			}
 		}
 	}
