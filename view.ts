@@ -1,8 +1,12 @@
+import ExamplePlugin from "main";
 import { ItemView, WorkspaceLeaf } from "obsidian";
+import { App, PluginSettingTab, Setting } from "obsidian";
 
 export const VIEW_TYPE_EXAMPLE = "example-view";
 
 export class ExampleView extends ItemView {
+  plugin: ExamplePlugin;
+  
   constructor(leaf: WorkspaceLeaf) {
     super(leaf);
   }
@@ -12,7 +16,7 @@ export class ExampleView extends ItemView {
   }
 
   getDisplayText() {
-    return "Example view";
+    return "25th Hour";
   }
 
   async onOpen() {
@@ -20,7 +24,7 @@ export class ExampleView extends ItemView {
     const container = this.containerEl.children[1];
     console.log(container);
     container.empty();
-    container.createEl("h4", { text: "Example view" });
+    container.createEl("h1", { text: "Test" });
   }
 
   async onClose() {

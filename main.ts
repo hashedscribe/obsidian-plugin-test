@@ -143,7 +143,7 @@ export default class ExamplePlugin extends Plugin {
 
 
 /* -------------------------------------------------------------------------- */
-/*                                  fucntions                                 */
+/*                               file management                              */
 /* -------------------------------------------------------------------------- */
 
 function batch_add(x: string, path: string, creation_date: Date, days_covered: number, data_array_day: string[], data_array_week: string[]): void {
@@ -155,13 +155,12 @@ function batch_add(x: string, path: string, creation_date: Date, days_covered: n
 	}
 }
 
-
 function generate_file_name(date: Date, index: number): string{
 	return(index.toString() + "-" + (index+6).toString() + "_" + moment(date).format("YYYY-MM-DD"));
 }
 
 function generate_file_data(data_array_day: string[], data_array_week: string[], newDate: Date): string{
-	let return_string = "---\n"
+	let return_string = "---\ntags:\n  - 25thHour\n"
 
 	//writing days
 	return_string = return_string + "days:\n"
