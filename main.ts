@@ -14,6 +14,8 @@ interface PluginSettings {
 	data_fields_day: string[]
 	data_fields_week: string[]
 
+	activity_list: string[]
+
 	// plugin data
 	creation_date: Date;
 	days_covered: number;
@@ -27,29 +29,8 @@ const DEFAULT_SETTINGS: Partial<PluginSettings> = {
 	batch_create: "31",
 	storage_folder: "/",
 	time_format: "military",
-	data_fields_day: [
-		"day", //name of the day (sun, mon, tue)
-		"row", //row in the spreadsheet
-	],
-	data_fields_week: [
-
-	],
-
 
 	// plugin data
-	data_array_day: [
-		"date",
-		"time_blocks",
-		"time_blocks_summed",
-		"missing_values",
-		"notes",
-	],
-	
-	data_array_week: [
-		"week_average",
-		"week_total"
-	]
-
 }
 
 export default class ExamplePlugin extends Plugin {
@@ -62,8 +43,23 @@ export default class ExamplePlugin extends Plugin {
 
 		await this.loadSettings();
 		this.addSettingTab(new SettingsTab(this.app, this)); 
+
+		//ensuring settings are correct
+
 		this.settings.creation_date = new Date();
 		this.settings.days_covered = 0;
+
+		this.settings.data_array_day = [
+			"date",
+			"time_blocks",
+			"time_blocks_summed",
+		];
+		
+		this.settings.data_array_week = [
+			"week_average",
+			"week_total"
+		];
+		
 
 		/* -------------------------------------------------------------------------- */
 		/*                                  page view                                 */
@@ -107,8 +103,9 @@ export default class ExamplePlugin extends Plugin {
 		});
 
 
-		console.log(this.app);
-		console.log(this.settings.creation_date);
+		// console.log(this.app);
+		console.log(this.settings);
+		// console.log(this.settings.creation_date);
 	}
 
 	async onunload() {
@@ -166,16 +163,23 @@ function generate_file_data(data_array_day: string[], data_array_week: string[],
 	return_string = return_string + "days:\n"
 
 	for(let i = 0; i < 7; i++){
-		return_string = return_string + "- ";
-		//write base info (arrays)
-		for(let j = 0; j < data_array_day.length; j++){
-			if(data_array_day[j] == "date"){
-				//generate iso date
-				return_string = return_string + data_array_day[j] + ": " + (new Date(newDate.getTime() + i *(1000 * 60 * 60 * 24))).toISOString().substring(0,10) + "\n"
-			}else{
-				return_string = return_string + "  " + data_array_day[j] + ": \n"
-			}
+		let iso_date_only = (new Date(newDate.getTime() + i *(1000 * 60 * 60 * 24))).toISOString().substring(0,10);
+
+		//setting up empty file
+		return_string = yaml_append(return_string, data_array_day[0], 2, true);
+
+		return_string = yaml_append(return_string, data_array_day[1], 4, false);
+		for(let k = 0; k < 48; k++){
+			return_string = yaml_append(return_string, k.toString(), 6, true);
+			return_string = yaml_append(return_string, "time", 8, false);
+			return_string = yaml_append(return_string, "activity", 8, false);
+			return_string = yaml_append(return_string, "notes", 8, false);
 		}
+
+		return_string = yaml_append(return_string, data_array_day[2], 4, false)
+
+
+		//filling generated files
 	}
 
 	//writing weeks
@@ -187,3 +191,19 @@ function generate_file_data(data_array_day: string[], data_array_week: string[],
 	return return_string;
 }
 
+function yaml_append(original_string: string, new_value: string, indent: number, array_item: boolean): string{
+	let return_string = "";
+
+	//write indents
+	for(let i = 0; i < indent; i++){
+		return_string += " ";
+	}
+
+	//add a dash
+	if(array_item){
+		return_string += "- ";
+	}
+
+	return_string += new_value + ":\n";
+	return (original_string + return_string);
+}
