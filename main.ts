@@ -87,9 +87,11 @@ export default class ExamplePlugin extends Plugin {
 			id: "add-month",
 			name: "Batch add files",
 			callback: () => {
-				batch_add(this.settings.batch_create, this.settings.storage_folder, this.settings.creation_date, this.settings.days_covered, this.settings.data_array_day, this.settings.data_array_week);
+				batch_add(this.settings.batch_create, this.settings.storage_folder, this.settings.creation_date, this.settings.days_covered, this.settings.data_array_day, this.settings.data_array_week, this.settings.data_fields_day, this.settings.data_fields_week);
 				let num: number = +this.settings.batch_create;
 				this.settings.days_covered += num*7;
+				console.log(get_files(this.app.vault.getAbstractFileByPath("/"), this.settings.storage_folder));
+				
 			}
 		});
 
@@ -103,8 +105,10 @@ export default class ExamplePlugin extends Plugin {
 		});
 
 
+
 		// console.log(this.app);
 		console.log(this.settings);
+		// console.log(this.fileManagement)
 		// console.log(this.settings.creation_date);
 	}
 
@@ -143,12 +147,13 @@ export default class ExamplePlugin extends Plugin {
 /*                               file management                              */
 /* -------------------------------------------------------------------------- */
 
-function batch_add(x: string, path: string, creation_date: Date, days_covered: number, data_array_day: string[], data_array_week: string[]): void {
+function batch_add(x: string, path: string, creation_date: Date, days_covered: number, data_array_day: string[], data_array_week: string[], data_fields_day: string[], data_fields_week: string[]): void {
 	let num: number = +x;
 
 	for(let i = 0; i < num; i++){
 		let newDate: Date = new Date(creation_date.getTime() + days_covered+(i*7) * (1000 * 60 * 60 * 24));
-		this.app.vault.create(path + generate_file_name(newDate, days_covered+(i*7)) + ".md", generate_file_data(data_array_day, data_array_week, newDate)); //create the file in the first input and then the contents of the file in the second input
+		let new_path: string = path + generate_file_name(newDate, days_covered+(i*7)) + ".md";
+		this.app.vault.create(new_path, generate_file_data(data_array_day, data_array_week, data_fields_day, data_fields_week)); //create the file in the first input and then the contents of the file in the second input
 	}
 }
 
@@ -156,15 +161,13 @@ function generate_file_name(date: Date, index: number): string{
 	return(index.toString() + "-" + (index+6).toString() + "_" + moment(date).format("YYYY-MM-DD"));
 }
 
-function generate_file_data(data_array_day: string[], data_array_week: string[], newDate: Date): string{
+function generate_file_data(data_array_day: string[], data_array_week: string[], data_fields_day: string[], data_fields_week: string[]): string{
 	let return_string = "---\ntags:\n  - 25thHour\n"
 
 	//writing days
-	return_string = return_string + "days:\n"
+	return_string = yaml_append(return_string, "days", 0, false);
 
 	for(let i = 0; i < 7; i++){
-		let iso_date_only = (new Date(newDate.getTime() + i *(1000 * 60 * 60 * 24))).toISOString().substring(0,10);
-
 		//setting up empty file
 		return_string = yaml_append(return_string, data_array_day[0], 2, true);
 
@@ -175,16 +178,20 @@ function generate_file_data(data_array_day: string[], data_array_week: string[],
 			return_string = yaml_append(return_string, "activity", 8, false);
 			return_string = yaml_append(return_string, "notes", 8, false);
 		}
+		return_string = yaml_append(return_string, data_array_day[2], 4, false);
 
-		return_string = yaml_append(return_string, data_array_day[2], 4, false)
-
-
-		//filling generated files
+		for(let i = 0; i < data_fields_day.length; i++){
+			return_string = yaml_append(return_string, data_fields_day[i], 4, false);
+		}
 	}
 
 	//writing weeks
 	for(let i = 0; i < data_array_week.length; i++){
-		return_string = return_string + data_array_week[i] + ": \n"
+		return_string = yaml_append(return_string, data_array_week[i], 0, false);
+	}
+
+	for(let i = 0; i < data_fields_week.length; i++){
+		return_string = yaml_append(return_string, data_fields_week[i], 0, false);
 	}
 
 	return_string = return_string + "---";
@@ -207,3 +214,17 @@ function yaml_append(original_string: string, new_value: string, indent: number,
 	return_string += new_value + ":\n";
 	return (original_string + return_string);
 }
+
+function get_files(all_files: any, storage_folder: string): string[]{
+	let files;
+	for(let i = 0; i < all_files.children.length; i++){
+		console.log("running loop");
+		if("/" + (all_files.children[i].path) + "/" == storage_folder){
+			console.log("path found");
+			files = all_files.children[i].children;
+			break;
+		}
+	}
+	return(files);
+}
+

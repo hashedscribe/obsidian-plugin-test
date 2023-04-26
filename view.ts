@@ -24,7 +24,7 @@ export class ExampleView extends ItemView {
     const container = this.containerEl.children[1];
     console.log(container);
     container.empty();
-    container.createEl("h1", { text: "Test" });
+    container.createEl("div", { text: "Test" });
 
     let files = this.app.vault.getMarkdownFiles();
 
@@ -32,8 +32,9 @@ export class ExampleView extends ItemView {
     console.log(this);
 
     for(let i = 0; i < files.length; i++){
-      if(files[i].path == this.plugin.settings.storage_folder)
-      container.createEl("p", {text: files[i].path});
+      if(files[i].path == this.plugin.settings.storage_folder){
+        container.createEl("div", {text: files[i].path});
+      }
     }
   }
 
