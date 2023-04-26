@@ -2,6 +2,7 @@ import { App, Notice, Plugin, PluginSettingTab, Setting } from 'obsidian';
 import { ExampleView, VIEW_TYPE_EXAMPLE } from "./view";
 import { SettingsTab } from "./settings";
 import moment from "moment";
+import { read } from 'fs';
 
 interface PluginSettings {
 	//configurable settings
@@ -89,9 +90,19 @@ export default class ExamplePlugin extends Plugin {
 			callback: () => {
 				batch_add(this.settings.batch_create, this.settings.storage_folder, this.settings.creation_date, this.settings.days_covered, this.settings.data_array_day, this.settings.data_array_week, this.settings.data_fields_day, this.settings.data_fields_week);
 				let num: number = +this.settings.batch_create;
-				this.settings.days_covered += num*7;
-				console.log(get_files(this.app.vault.getAbstractFileByPath("/"), this.settings.storage_folder));
-				
+				this.settings.days_covered += num*7;	
+			}
+		});
+
+		this.addCommand({
+			id: "update-files",
+			name: "Update file data",
+			callback: () => {
+				let files: any = get_files(this.app.vault.getAbstractFileByPath("/"), this.settings.storage_folder);
+
+				for(let i = 0; i < files.length; i++){
+					console.log(this.app.vault.read(files[i]));
+				}
 			}
 		});
 
@@ -106,7 +117,7 @@ export default class ExamplePlugin extends Plugin {
 
 
 
-		// console.log(this.app);
+		console.log(this.app.vault);
 		console.log(this.settings);
 		// console.log(this.fileManagement)
 		// console.log(this.settings.creation_date);
@@ -215,7 +226,7 @@ function yaml_append(original_string: string, new_value: string, indent: number,
 	return (original_string + return_string);
 }
 
-function get_files(all_files: any, storage_folder: string): string[]{
+function get_files(all_files: any, storage_folder: string){
 	let files;
 	for(let i = 0; i < all_files.children.length; i++){
 		console.log("running loop");
@@ -225,6 +236,6 @@ function get_files(all_files: any, storage_folder: string): string[]{
 			break;
 		}
 	}
-	return(files);
+	return(files.slice(0, files.length));
 }
 
