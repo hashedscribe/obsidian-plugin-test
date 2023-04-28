@@ -1,8 +1,7 @@
-import { App, Notice, Plugin, PluginSettingTab, Setting } from 'obsidian';
+import { App, Notice, Plugin, PluginSettingTab, Setting, parseYaml } from 'obsidian';
 import { ExampleView, VIEW_TYPE_EXAMPLE } from "./view";
 import { SettingsTab } from "./settings";
 import moment from "moment";
-import { read } from 'fs';
 
 interface PluginSettings {
 	//configurable settings
@@ -71,7 +70,7 @@ export default class ExamplePlugin extends Plugin {
 		// register view (enable it to load)
 		this.registerView(
 			VIEW_TYPE_EXAMPLE,
-			(leaf) => new ExampleView(leaf)
+			(leaf) => new ExampleView(leaf, this)
 		);
 
 
@@ -115,8 +114,8 @@ export default class ExamplePlugin extends Plugin {
 
 
 
-		console.log(this.app.vault);
-		console.log(this.settings);
+		// console.log(this.app.vault);
+		// console.log(this.settings);
 		// console.log(this.fileManagement)
 		// console.log(this.settings.creation_date);
 	}
@@ -162,20 +161,16 @@ async function batch_add(x: string, path: string, creation_date: Date, days_cove
 	for(let i = 0; i < num; i++){
 		let newDate: Date = new Date(creation_date.getTime() + days_covered+(i*7) * (1000 * 60 * 60 * 24));
 		let new_path: string = path + generate_file_name(newDate, days_covered+(i*7)) + ".md";
-		await this.app.vault.create(new_path, generate_file_data(data_array_day, data_array_week, data_fields_day, data_fields_week ,days_covered+(i*7), creation_date)); //create the file in the first input and then the contents of the file in the second input
+		await this.app.vault.create(new_path, generate_file_data(data_array_day, data_array_week, data_fields_day, data_fields_week ,days_covered+(i*7), creation_date, new_path)); //create the file in the first input and then the contents of the file in the second input
 	}
 	let files: any = get_files(this.app.vault.getAbstractFileByPath("/"), path);
-
-	for(let i = 0; i < files.length; i++){
-		update_field(files[i], i ,"test");
-	}
 }
 
 function generate_file_name(date: Date, index: number): string{
 	return(index.toString() + "-" + (index+6).toString() + "_" + moment(date).format("YYYY-MM-DD"));
 }
 
-function generate_file_data(data_array_day: string[], data_array_week: string[], data_fields_day: string[], data_fields_week: string[],  index: number, creation_date: Date): string{
+function generate_file_data(data_array_day: string[], data_array_week: string[], data_fields_day: string[], data_fields_week: string[],  index: number, creation_date: Date, parent_file_path: string): string{
 	let return_string = "---\ntags:\n  - 25thHour\n"
 
 	//writing days
@@ -201,6 +196,8 @@ function generate_file_data(data_array_day: string[], data_array_week: string[],
 		for(let i = 0; i < data_fields_day.length; i++){
 			return_string = yaml_append(return_string, data_fields_day[i], 4, false);
 		}
+
+		return_string = return_string + "    parent_file: " + parent_file_path + "\n";
 	}
 
 	//writing weeks
@@ -244,6 +241,8 @@ function get_files(all_files: any, storage_folder: string){
 	return(files.slice(0, files.length));
 }
 
-async function update_field(file: any, row: number, field: string){
+export async function text_to_yaml(file: any): Promise<any>{
 	let file_contents = await this.app.vault.read(file);
+    let file_obj = parseYaml(file_contents.substring(3, file_contents.length-3));
+	return file_obj;
 }

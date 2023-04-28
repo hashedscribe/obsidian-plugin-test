@@ -14,6 +14,8 @@ export class SettingsTab extends PluginSettingTab {
 
         containerEl.empty();
 
+        console.log(this.plugin);
+
         new Setting(containerEl)
             .setName("Batch add number")
             .setDesc("Number of files each batch add should create.")
