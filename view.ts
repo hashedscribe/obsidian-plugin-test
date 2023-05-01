@@ -47,7 +47,6 @@ export class ExampleView extends ItemView {
       return a.name.substring(a.name.length-13, a.name.length-1).localeCompare(b.name.substring(b.name.length-13, b.name.length-1))
     })
 
-    console.log(relevant_files);
     display_files(relevant_files, container);
 
     //pull yaml to objects
@@ -56,6 +55,19 @@ export class ExampleView extends ItemView {
     }
 
     console.log(day_objects);
+
+
+
+    /* -------------------------------------------------------------------------- */
+    /*                                making table                                */
+    /* -------------------------------------------------------------------------- */
+
+
+
+
+    
+
+
 
   }
 
