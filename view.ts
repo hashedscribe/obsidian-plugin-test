@@ -2,6 +2,7 @@ import ExamplePlugin from "./main";
 import { ItemView, WorkspaceLeaf, parseYaml, TFile } from "obsidian";
 import { App, PluginSettingTab, Setting } from "obsidian";
 import { text_to_yaml } from "./main";
+import jspreadsheet from "jspreadsheet-ce";
 
 export const VIEW_TYPE_EXAMPLE = "example-view";
 
@@ -26,15 +27,11 @@ export class ExampleView extends ItemView {
     const container = this.containerEl.children[1];
     console.log(container);
     container.empty();
-    container.createEl("div", { text: "Test" });
-
 
     let loaded_files = this.app.vault.getMarkdownFiles();
     let relevant_files = [];
     let day_objects = [];
-    
-    // console.log(loaded_files);
-    console.log(this.plugin.settings);
+
 
     //filter relevant files
     for(let i = 0; i < loaded_files.length; i++){
@@ -47,14 +44,29 @@ export class ExampleView extends ItemView {
       return a.name.substring(a.name.length-13, a.name.length-1).localeCompare(b.name.substring(b.name.length-13, b.name.length-1))
     })
 
-    display_files(relevant_files, container);
-
     //pull yaml to objects
     for(let i = 0; i < relevant_files.length; i++){
       day_objects.push(await text_to_yaml(relevant_files[i]));
     }
 
-    console.log(day_objects);
+
+    /* -------------------------------------------------------------------------- */
+    /*                   insert jexcel/jspreadsheet and jsuites                   */
+    /* -------------------------------------------------------------------------- */
+
+    let insertHtml = `<script src="https://bossanova.uk/jspreadsheet/v4/jexcel.js"></script>
+    <script src="https://jsuites.net/v4/jsuites.js"></script>
+    <link rel="stylesheet" href="https://jsuites.net/v4/jsuites.css" type="text/css" />
+    <link rel="stylesheet" href="https://bossanova.uk/jspreadsheet/v4/jexcel.css" type="text/css" />`;
+
+    container.innerHTML = container.innerHTML + insertHtml;
+
+    /* -------------------------------------------------------------------------- */
+    /*                               making nav bar                               */
+    /* -------------------------------------------------------------------------- */
+
+    let nav_bar = container.createEl("div", {cls: "nav_bar"});
+
 
 
 
@@ -62,23 +74,36 @@ export class ExampleView extends ItemView {
     /*                                making table                                */
     /* -------------------------------------------------------------------------- */
 
+    let main_grid = container.createEl("div", {cls: "main_grid"});
+    let data = [];
+
+    for(let i = 0; i < day_objects.length; i++){
+      for(let j = 0; j < day_objects[i].days.length; j++){
+        let temp_array = [];
+        temp_array.push(day_objects[i].days[j].date);
+        for(let k = 0; k < 48; k++){
+          temp_array.push(day_objects[i].days[j].time_blocks[k].activity)
+        }
+        data.push(temp_array);
+      }
+    }
 
 
 
-    
-
-
-
+    jspreadsheet(main_grid, {
+      lazyLoading: true,
+      rowResize: false,
+      columnResize: false,
+      tableOverflow: true,
+      tableHeight: "100%",
+      data: data,
+      columns: [
+        { title: "Date", width: 120 },
+      ]
+    })
   }
 
   async onClose() {
     // Nothing to clean up.
-  }
-}
-
-async function display_files(files: TFile[], parent_container: any){
-  for(let i = 0; i < files.length; i++){
-    parent_container.createEl("div", { text: files[i].name });
-    // console.log(text_to_yaml(files[i]));
   }
 }

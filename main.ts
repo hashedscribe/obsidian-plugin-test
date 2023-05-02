@@ -180,7 +180,7 @@ function generate_file_data(data_array_day: string[], data_array_week: string[],
 		//setting up empty file
 		// return_string = yaml_append(return_string, data_array_day[0], 2, true);
 		return_string = return_string + "  - row: " + (index+i).toString() + "\n";
-		return_string = return_string + "    date: " + moment(new Date(creation_date.getTime() + index * (1000 * 60 * 60 * 24))).format("YYYY-MM-DD") + "\n";
+		return_string = return_string + "    date: " + moment(new Date(creation_date.getTime() + (index + i)* (1000 * 60 * 60 * 24)+i)).format("YYYY-MM-DD") + "\n";
 
 		// return_string = yaml_append(return_string, data_array_day[1], 4, false);
 		return_string = yaml_append(return_string, data_array_day[2], 4, false);

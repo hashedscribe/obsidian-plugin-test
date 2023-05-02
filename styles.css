@@ -6,3 +6,23 @@ available in the app when your plugin is enabled.
 If your plugin does not need CSS, delete this file.
 
 */
+
+
+.day_row{
+    font-family: "Monaco", monospace;
+    padding: 10px;
+}
+
+.row_date_text{
+    display: inline;
+    padding: 10px;
+}
+
+.row_container{
+    display: inline;
+}
+
+.time_blocks{
+    display: inline-flex;
+    border: 0.5px solid var(--background-modifier-border);
+}
