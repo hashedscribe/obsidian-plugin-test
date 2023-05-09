@@ -1,5 +1,6 @@
 import ExamplePlugin from "./main";
 import { App, PluginSettingTab, Setting } from "obsidian";
+import { toggle_numbers } from "./main";
 
 export class SettingsTab extends PluginSettingTab {
     plugin: ExamplePlugin;
@@ -45,6 +46,21 @@ export class SettingsTab extends PluginSettingTab {
         new Setting(containerEl)
         .setName("Days covered: ")
         .setDesc(this.plugin.settings.days_covered.toString())
+
+
+        new Setting(containerEl)
+        .setName("Show numbers")
+        .setDesc("Toggles showing the number on the left hand side.")
+        .addToggle((text) => 
+            text
+            .setValue(this.plugin.settings.show_numbers)
+            .onChange(async (value) => {
+                this.plugin.settings.show_numbers = value;
+                toggle_numbers(value);
+                await this.plugin.saveSettings();
+            })
+        )
+    
 
     }
 }

@@ -56,8 +56,7 @@ export class ExampleView extends ItemView {
 
     let insertHtml = `<script src="https://bossanova.uk/jspreadsheet/v4/jexcel.js"></script>
     <script src="https://jsuites.net/v4/jsuites.js"></script>
-    <link rel="stylesheet" href="https://jsuites.net/v4/jsuites.css" type="text/css" />
-    <link rel="stylesheet" href="https://bossanova.uk/jspreadsheet/v4/jexcel.css" type="text/css" />`;
+    <link rel="stylesheet" href="https://jsuites.net/v4/jsuites.css" type="text/css" />`;
 
     container.innerHTML = container.innerHTML + insertHtml;
 
@@ -76,6 +75,7 @@ export class ExampleView extends ItemView {
 
     let main_grid = container.createEl("div", {cls: "main_grid"});
     let data = [];
+    let columns = [];
 
     for(let i = 0; i < day_objects.length; i++){
       for(let j = 0; j < day_objects[i].days.length; j++){
@@ -88,18 +88,21 @@ export class ExampleView extends ItemView {
       }
     }
 
+    columns.push({ title: "Date", width: 120 });
 
+    for(let i = 0; i < 48; i++){
+      columns.push({ title: String(i+1), width: 24 });
+    }
 
     jspreadsheet(main_grid, {
       lazyLoading: true,
       rowResize: false,
       columnResize: false,
       tableOverflow: true,
-      tableHeight: "100%",
+      tableHeight: "1000px",
+
       data: data,
-      columns: [
-        { title: "Date", width: 120 },
-      ]
+      columns: columns,
     })
   }
 

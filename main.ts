@@ -16,6 +16,8 @@ interface PluginSettings {
 
 	activity_list: string[]
 
+	show_numbers: boolean;
+
 	// plugin data
 	creation_date: Date;
 	days_covered: number;
@@ -29,6 +31,7 @@ const DEFAULT_SETTINGS: Partial<PluginSettings> = {
 	batch_create: "31",
 	storage_folder: "/",
 	time_format: "military",
+	show_numbers: false,
 
 	// plugin data
 }
@@ -61,6 +64,7 @@ export default class ExamplePlugin extends Plugin {
 			"week_average",
 			"week_total"
 		];
+		
 		
 
 		/* -------------------------------------------------------------------------- */
@@ -111,13 +115,6 @@ export default class ExamplePlugin extends Plugin {
 				console.log("add day field")
 			}
 		});
-
-
-
-		// console.log(this.app.vault);
-		// console.log(this.settings);
-		// console.log(this.fileManagement)
-		// console.log(this.settings.creation_date);
 	}
 
 	async onunload() {
@@ -155,7 +152,7 @@ export default class ExamplePlugin extends Plugin {
 /*                               file management                              */
 /* -------------------------------------------------------------------------- */
 
-async function batch_add(x: string, path: string, creation_date: Date, days_covered: number, data_array_day: string[], data_array_week: string[], data_fields_day: string[], data_fields_week: string[]): void {
+async function batch_add(x: string, path: string, creation_date: Date, days_covered: number, data_array_day: string[], data_array_week: string[], data_fields_day: string[], data_fields_week: string[]) {
 	let num: number = +x;
 
 	for(let i = 0; i < num; i++){
@@ -245,4 +242,23 @@ export async function text_to_yaml(file: any): Promise<any>{
 	let file_contents = await this.app.vault.read(file);
     let file_obj = parseYaml(file_contents.substring(3, file_contents.length-3));
 	return file_obj;
+}
+
+
+/* -------------------------------------------------------------------------- */
+/*                               style setttings                              */
+/* -------------------------------------------------------------------------- */
+
+export function toggle_numbers(show: boolean): void{
+	let rows: any = document.getElementsByClassName("jexcel_row");
+	for(let i = 0; i < rows.length; i++){
+		if(show){
+			rows[i].style.visibility = "visible";
+			rows[i].style.visibility = "50px";
+		}else{
+			rows[i].style.visibility = "hidden";
+			rows[i].style.width = "0px";
+
+		}
+	}
 }
