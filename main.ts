@@ -262,3 +262,8 @@ export function toggle_numbers(show: boolean): void{
 		}
 	}
 }
+
+export function turn_off_box_shadow(){
+    let grid: any = document.getElementsByClassName("jexcel_content")[0];
+	grid.style.boxShadow = "none";
+}

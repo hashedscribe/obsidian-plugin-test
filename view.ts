@@ -1,7 +1,7 @@
 import ExamplePlugin from "./main";
 import { ItemView, WorkspaceLeaf, parseYaml, TFile } from "obsidian";
 import { App, PluginSettingTab, Setting } from "obsidian";
-import { text_to_yaml } from "./main";
+import { text_to_yaml, turn_off_box_shadow } from "./main";
 import jspreadsheet from "jspreadsheet-ce";
 
 export const VIEW_TYPE_EXAMPLE = "example-view";
@@ -25,7 +25,6 @@ export class ExampleView extends ItemView {
   async onOpen() {
     //container is an html element
     const container = this.containerEl.children[1];
-    console.log(container);
     container.empty();
 
     let loaded_files = this.app.vault.getMarkdownFiles();
@@ -60,6 +59,8 @@ export class ExampleView extends ItemView {
 
     container.innerHTML = container.innerHTML + insertHtml;
 
+
+
     /* -------------------------------------------------------------------------- */
     /*                               making nav bar                               */
     /* -------------------------------------------------------------------------- */
@@ -73,7 +74,8 @@ export class ExampleView extends ItemView {
     /*                                making table                                */
     /* -------------------------------------------------------------------------- */
 
-    let main_grid = container.createEl("div", {cls: "main_grid"});
+    let centre = container.createEl("div", {cls: "centre"});
+    let main_grid = centre.createEl("div", {cls: "main_grid"});
     let data = [];
     let columns = [];
 
@@ -100,10 +102,19 @@ export class ExampleView extends ItemView {
       columnResize: false,
       tableOverflow: true,
       tableHeight: "1000px",
+      
 
       data: data,
       columns: columns,
-    })
+    })    
+
+    /* -------------------------------------------------------------------------- */
+    /*                              more css styling                              */
+    /* -------------------------------------------------------------------------- */
+    setTimeout(() => {
+      turn_off_box_shadow()
+    }, 0);
+    
   }
 
   async onClose() {
