@@ -109,10 +109,11 @@ Below is styling for the table from https://bossanova.uk/jspreadsheet/v4/jexcel.
     white-space:  nowrap;
     empty-cells: show;
     border: 0px;
-    /* background-color: #fff; */ /* cell colour */
     width: 0;
 
     border: var(--border-width) solid transparent;
+    font-size: small;
+    color: var(--text-normal);
 }
 
 /* -------------------------------------------------------------------------- */
@@ -121,7 +122,10 @@ Below is styling for the table from https://bossanova.uk/jspreadsheet/v4/jexcel.
 
 .jexcel > thead > tr > td
 {
-    border: --border-width solid transparent;
+    border: var(--border-width) solid transparent;
+    /* border-right: var(--border-width) solid var(--background-modifier-border); */
+    /* border-bottom: var(--border-width) solid var(--background-modifier-border); */
+
     background-color: var(--background-secondary);  /* header bg colour */
     padding: 2px;
     cursor: pointer;
@@ -171,23 +175,25 @@ Below is styling for the table from https://bossanova.uk/jspreadsheet/v4/jexcel.
 
 .jexcel > tbody > tr > td:first-child
 {
-    visibility: hidden;
+    visibility: visible;
     position:relative;
     background-color: var(--background-secondary);  /* header bg colour */
     text-align:center;
     width: 0px;
+    color: var(--text-muted);
+
 }
 
 .jexcel > tbody > tr > td
 {
-    border-top: var(--border-width) solid var(--background-modifier-border); /* left column colour grid borders */
-    border-left: var(--border-width) solid var(--background-modifier-border);
-    border-right: var(--border-width) solid transparent;
-    border-bottom: var(--border-width) solid transparent;
+    border-bottom: var(--border-width) solid var(--background-modifier-border); /* left column colour grid borders */
+    border-right: var(--border-width) solid var(--background-modifier-border);
+    border-left: var(--border-width) solid transparent;
+    border-top: var(--border-width) solid transparent;
     padding:4px;
     white-space: nowrap;
     box-sizing: border-box;
-    line-height:0.75em;
+    line-height:12px;
 }
 
 .jexcel_overflow > tbody > tr > td {
@@ -308,7 +314,7 @@ Below is styling for the table from https://bossanova.uk/jspreadsheet/v4/jexcel.
 } */
 
 .jexcel .highlight {
-    background-color: var(--background-modifier-hover);
+    background-color: var(--background-modifier-active-hover);
 }
 
 .jexcel .highlight-top {
@@ -341,23 +347,23 @@ Below is styling for the table from https://bossanova.uk/jspreadsheet/v4/jexcel.
 }
 .jexcel .selection
 {
-    background-color:rgba(0,0,0,0.05);
+    background-color:var(--background-modifier-hover);
 }
 .jexcel .selection-left
 {
-    border-left:1px dotted #000;
+    border-left:1px dotted var(--background-modifier-border-hover);
 }
 .jexcel .selection-right
 {
-    border-right:1px dotted #000;
+    border-right:1px dotted var(--background-modifier-border-hover);
 }
 .jexcel .selection-top
 {
-    border-top:1px dotted #000;
+    border-top:1px dotted var(--background-modifier-border-hover);
 }
 .jexcel .selection-bottom
 {
-    border-bottom:1px dotted #000;
+    border-bottom:1px dotted var(--background-modifier-border-hover);
 }
 .jexcel_corner
 {
@@ -727,20 +733,4 @@ Below is styling for the table from https://bossanova.uk/jspreadsheet/v4/jexcel.
     padding: 0px;
     padding-left: 6px;
     padding-right: 20px;
-}
-
-.jexcel thead .jexcel_freezed, .jexcel tfoot .jexcel_freezed {
-    left: 0px;
-    z-index: 3 !important;
-    /* box-shadow: 2px 0px 2px 0.2px #ccc !important;
-    -webkit-box-shadow: 2px 0px 2px 0.2px #ccc !important;
-    -moz-box-shadow: 2px 0px 2px 0.2px #ccc !important; */
-}
-
-.jexcel tbody .jexcel_freezed {
-    position: relative;
-    /* background-color: #fff;
-    box-shadow: 1px 1px 1px 1px #ccc !important;
-    -webkit-box-shadow: 2px 4px 4px 0.1px #ccc !important;
-    -moz-box-shadow: 2px 4px 4px 0.1px #ccc !important; */
 }

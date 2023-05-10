@@ -16,7 +16,6 @@ interface PluginSettings {
 
 	activity_list: string[]
 
-	show_numbers: boolean;
 
 	// plugin data
 	creation_date: Date;
@@ -31,7 +30,6 @@ const DEFAULT_SETTINGS: Partial<PluginSettings> = {
 	batch_create: "31",
 	storage_folder: "/",
 	time_format: "military",
-	show_numbers: false,
 
 	// plugin data
 }
@@ -64,7 +62,6 @@ export default class ExamplePlugin extends Plugin {
 			"week_average",
 			"week_total"
 		];
-		
 		
 
 		/* -------------------------------------------------------------------------- */
@@ -155,10 +152,13 @@ export default class ExamplePlugin extends Plugin {
 async function batch_add(x: string, path: string, creation_date: Date, days_covered: number, data_array_day: string[], data_array_week: string[], data_fields_day: string[], data_fields_week: string[]) {
 	let num: number = +x;
 
+	console.log(days_covered)
+
 	for(let i = 0; i < num; i++){
-		let newDate: Date = new Date(creation_date.getTime() + days_covered+(i*7) * (1000 * 60 * 60 * 24));
-		let new_path: string = path + generate_file_name(newDate, days_covered+(i*7)) + ".md";
-		await this.app.vault.create(new_path, generate_file_data(data_array_day, data_array_week, data_fields_day, data_fields_week ,days_covered+(i*7), creation_date, new_path)); //create the file in the first input and then the contents of the file in the second input
+		let newDate: any = moment(new Date(creation_date.getTime() + (days_covered+7*i)* (1000 * 60 * 60 * 24)+i)).format("YYYY-MM-DD");
+		console.log(newDate)
+		let new_path: string = path + generate_file_name(newDate, (days_covered+(i*7))) + ".md";
+		await this.app.vault.create(new_path, generate_file_data(data_array_day, data_array_week, data_fields_day, data_fields_week, days_covered+(i*7), creation_date, new_path)); //create the file in the first input and then the contents of the file in the second input
 	}
 	let files: any = get_files(this.app.vault.getAbstractFileByPath("/"), path);
 }
@@ -248,20 +248,6 @@ export async function text_to_yaml(file: any): Promise<any>{
 /* -------------------------------------------------------------------------- */
 /*                               style setttings                              */
 /* -------------------------------------------------------------------------- */
-
-export function toggle_numbers(show: boolean): void{
-	let rows: any = document.getElementsByClassName("jexcel_row");
-	for(let i = 0; i < rows.length; i++){
-		if(show){
-			rows[i].style.visibility = "visible";
-			rows[i].style.visibility = "50px";
-		}else{
-			rows[i].style.visibility = "hidden";
-			rows[i].style.width = "0px";
-
-		}
-	}
-}
 
 export function turn_off_box_shadow(){
     let grid: any = document.getElementsByClassName("jexcel_content")[0];

@@ -1,4 +1,3 @@
-import ExamplePlugin from "./main";
 import { ItemView, WorkspaceLeaf, parseYaml, TFile } from "obsidian";
 import { App, PluginSettingTab, Setting } from "obsidian";
 import { text_to_yaml, turn_off_box_shadow } from "./main";
@@ -97,7 +96,7 @@ export class ExampleView extends ItemView {
     }
 
     jspreadsheet(main_grid, {
-      lazyLoading: true,
+      // lazyLoading: true,
       rowResize: false,
       columnResize: false,
       tableOverflow: true,
@@ -114,7 +113,7 @@ export class ExampleView extends ItemView {
     setTimeout(() => {
       turn_off_box_shadow()
     }, 0);
-    
+  
   }
 
   async onClose() {
