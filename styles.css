@@ -324,18 +324,6 @@ Below is styling for the table from https://bossanova.uk/jspreadsheet/v4/jexcel.
     cursor: pointer;
 }
 
-/* .jexcel > tfoot > tr > td
-{
-    border-top: 1px solid #ccc;
-    border-left: 1px solid #ccc;
-    border-right: 1px solid transparent;
-    border-bottom: 1px solid transparent;
-    background-color: #f3f3f3;
-    padding: 2px;
-    cursor: pointer;
-    box-sizing: border-box;
-    overflow: hidden;
-} */
 
 .jexcel .highlight {
     background-color: var(--background-modifier-active-hover);

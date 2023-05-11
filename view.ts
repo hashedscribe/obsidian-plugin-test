@@ -95,13 +95,25 @@ export class ExampleView extends ItemView {
 
     let centre = container.createEl("div", {cls: "centre"});
 
+
+    /* -------------------------------------------------------------------------- */
+    /*                                activity bar                                */
+    /* -------------------------------------------------------------------------- */
+
+    let activity_bar = container.createEl("div", {cls: "activity_bar"});
+
+
+
+
+
+
     /* -------------------------------------------------------------------------- */
     /*                                making table                                */
     /* -------------------------------------------------------------------------- */
 
     
     let grid_view = centre.createEl("div", {cls: "grid_view"});
-    let data = [];
+    let data: any[][] = []; //updated by typing in the spreadsheet
     let columns = [];
 
     for(let i = 0; i < day_objects.length; i++){
@@ -121,6 +133,18 @@ export class ExampleView extends ItemView {
       columns.push({ title: String(i+1), width: 24 });
     }
 
+
+    //table functions
+
+    let selectionActive = function(instance: any, x1: any, y1: any, x2:any, y2:any, origin:any) {
+      console.log(x1.toString() + " " + y1.toString()); 
+      //get the date
+      let date = data[y1][0];
+      console.log(date);
+    }
+
+
+
     jspreadsheet(grid_view, {
       rowResize: false,
       columnResize: false,
@@ -129,6 +153,10 @@ export class ExampleView extends ItemView {
       
       data: data,
       columns: columns,
+
+      //event handlers
+      onselection: selectionActive,
+
     })    
 
     /* -------------------------------------------------------------------------- */
