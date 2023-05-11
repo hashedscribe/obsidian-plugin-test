@@ -65,7 +65,22 @@ export class ExampleView extends ItemView {
     /* -------------------------------------------------------------------------- */
 
     let nav_bar = container.createEl("div", {cls: "nav_bar"});
+    let grid_button = nav_bar.createEl("button", {cls:"nav_button", text: "Grid"});
+    let stats_button = nav_bar.createEl("button", {cls: "nav_button", text: "Stats"});
+    let configure_button = nav_bar.createEl("button", {cls: "nav_button", text: "Configure"});
 
+
+    grid_button.addEventListener("click", e => {
+      main_grid.style.display = "block";
+    });
+
+    stats_button.addEventListener("click", e => {
+      main_grid.style.display = "none";
+    });
+
+    configure_button.addEventListener("click", e => {
+      main_grid.style.display = "none";
+    });
 
 
 
@@ -96,7 +111,6 @@ export class ExampleView extends ItemView {
     }
 
     jspreadsheet(main_grid, {
-      // lazyLoading: true,
       rowResize: false,
       columnResize: false,
       tableOverflow: true,

@@ -32,6 +32,18 @@ If your plugin does not need CSS, delete this file.
     justify-content: center;
 }
 
+.nav_button{
+    background-color: var(--interactive-normal);
+    margin-top: 10px;
+    margin-bottom: 15px;
+    font-size: medium;
+    width: 10%;
+    border-radius: 0px;
+}
+
+.nav_bar{
+    text-align: center;
+  }
 
 /*
 Below is styling for the table from https://bossanova.uk/jspreadsheet/v4/jexcel.css with alterations
