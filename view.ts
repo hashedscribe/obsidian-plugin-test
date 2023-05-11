@@ -2,6 +2,7 @@ import { ItemView, WorkspaceLeaf, parseYaml, TFile } from "obsidian";
 import { App, PluginSettingTab, Setting } from "obsidian";
 import { text_to_yaml, turn_off_box_shadow } from "./main";
 import jspreadsheet from "jspreadsheet-ce";
+import ExamplePlugin from "./main";
 
 export const VIEW_TYPE_EXAMPLE = "example-view";
 
@@ -71,25 +72,35 @@ export class ExampleView extends ItemView {
 
 
     grid_button.addEventListener("click", e => {
-      main_grid.style.display = "block";
+      grid_view.style.display = "block";
+      configure_view.style.display = "none";
+      stats_view.style.display = "none";
+
     });
 
     stats_button.addEventListener("click", e => {
-      main_grid.style.display = "none";
+      grid_view.style.display = "none";
+      configure_view.style.display = "none";
+      stats_view.style.display = "block";
+
     });
 
     configure_button.addEventListener("click", e => {
-      main_grid.style.display = "none";
+      grid_view.style.display = "none";
+      configure_view.style.display = "block";
+      stats_view.style.display = "none";
+
     });
 
 
+    let centre = container.createEl("div", {cls: "centre"});
 
     /* -------------------------------------------------------------------------- */
     /*                                making table                                */
     /* -------------------------------------------------------------------------- */
 
-    let centre = container.createEl("div", {cls: "centre"});
-    let main_grid = centre.createEl("div", {cls: "main_grid"});
+    
+    let grid_view = centre.createEl("div", {cls: "grid_view"});
     let data = [];
     let columns = [];
 
@@ -110,16 +121,31 @@ export class ExampleView extends ItemView {
       columns.push({ title: String(i+1), width: 24 });
     }
 
-    jspreadsheet(main_grid, {
+    jspreadsheet(grid_view, {
       rowResize: false,
       columnResize: false,
       tableOverflow: true,
       tableHeight: "1000px",
       
-
       data: data,
       columns: columns,
     })    
+
+    /* -------------------------------------------------------------------------- */
+    /*                                  configure                                 */
+    /* -------------------------------------------------------------------------- */
+    let configure_view = centre.createEl("div", {cls: "configure_view", text: "Configure settings here"});
+
+
+
+
+    /* -------------------------------------------------------------------------- */
+    /*                                 stats view                                 */
+    /* -------------------------------------------------------------------------- */
+    let stats_view = centre.createEl("div", {cls: "stats_view", text: "Look at statistics here"});
+
+
+
 
     /* -------------------------------------------------------------------------- */
     /*                              more css styling                              */

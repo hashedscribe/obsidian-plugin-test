@@ -43,7 +43,19 @@ If your plugin does not need CSS, delete this file.
 
 .nav_bar{
     text-align: center;
-  }
+}
+
+.configure_view{
+    display: none;
+}
+
+.grid_view{
+    display: block;
+}
+
+.stats_view{
+    display: none;
+}
 
 /*
 Below is styling for the table from https://bossanova.uk/jspreadsheet/v4/jexcel.css with alterations
