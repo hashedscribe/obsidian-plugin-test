@@ -1,7 +1,8 @@
-import { App, Notice, Plugin, PluginSettingTab, Setting, parseYaml } from 'obsidian';
+import { Plugin, parseYaml, TFile } from 'obsidian';
 import { ExampleView, VIEW_TYPE_EXAMPLE } from "./view";
 import { SettingsTab } from "./settings";
 import moment from "moment";
+import YAML from 'yaml';
 
 interface PluginSettings {
 	//configurable settings
@@ -156,7 +157,6 @@ async function batch_add(x: string, path: string, creation_date: Date, days_cove
 
 	for(let i = 0; i < num; i++){
 		let newDate: any = moment(new Date(creation_date.getTime() + (days_covered+7*i)* (1000 * 60 * 60 * 24)+i)).format("YYYY-MM-DD");
-		console.log(newDate)
 		let new_path: string = path + generate_file_name(newDate, (days_covered+(i*7))) + ".md";
 		await this.app.vault.create(new_path, generate_file_data(data_array_day, data_array_week, data_fields_day, data_fields_week, days_covered+(i*7), creation_date, new_path)); //create the file in the first input and then the contents of the file in the second input
 	}
@@ -250,7 +250,10 @@ export async function text_to_yaml(file: any): Promise<any>{
 /* -------------------------------------------------------------------------- */
 
 
-
+export function upadteFileData(full_yaml: any, file: TFile):void{
+	let new_yaml = YAML.stringify(full_yaml);
+	this.app.vault.modify(file, "---\n" + new_yaml + "\n---");
+}
 
 
 /* -------------------------------------------------------------------------- */

@@ -23,6 +23,7 @@
 	},
 	"dependencies": {
 		"jspreadsheet-ce": "^4.11.5",
-		"moment": "^2.29.4"
+		"moment": "^2.29.4",
+		"yaml": "^2.2.2"
 	}
 }

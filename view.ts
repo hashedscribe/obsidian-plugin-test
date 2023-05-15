@@ -1,6 +1,6 @@
 import { ItemView, WorkspaceLeaf, parseYaml, TFile } from "obsidian";
 import { App, PluginSettingTab, Setting } from "obsidian";
-import { text_to_yaml, turn_off_box_shadow } from "./main";
+import { text_to_yaml, turn_off_box_shadow, upadteFileData } from "./main";
 import jspreadsheet from "jspreadsheet-ce";
 import ExamplePlugin from "./main";
 
@@ -28,19 +28,20 @@ export class ExampleView extends ItemView {
     container.empty();
 
     let loaded_files = this.app.vault.getMarkdownFiles();
-    let relevant_files = [];
-    let day_objects = [];
+    let relevant_files: any[] = [];
+    let day_objects: any[] = [];
 
 
     //filter relevant files
     for(let i = 0; i < loaded_files.length; i++){
       if("/" + loaded_files[i].parent.path + "/" == this.plugin.settings.storage_folder){
-        relevant_files.push(loaded_files[i])
+        relevant_files.push(loaded_files[i]);
       }
     }
+
     //sort by date
     relevant_files.sort(function(a: TFile, b: TFile):number{
-      return a.name.substring(a.name.length-13, a.name.length-1).localeCompare(b.name.substring(b.name.length-13, b.name.length-1))
+      return a.name.substring(a.name.length-13, a.name.length-1).localeCompare(b.name.substring(b.name.length-13, b.name.length-1));
     })
 
     //pull yaml to objects
@@ -69,7 +70,6 @@ export class ExampleView extends ItemView {
     let grid_button = nav_bar.createEl("button", {cls:"nav_button", text: "Grid"});
     let stats_button = nav_bar.createEl("button", {cls: "nav_button", text: "Stats"});
     let configure_button = nav_bar.createEl("button", {cls: "nav_button", text: "Configure"});
-
 
     grid_button.addEventListener("click", e => {
       grid_view.style.display = "block";
@@ -121,7 +121,7 @@ export class ExampleView extends ItemView {
         let temp_array = [];
         temp_array.push(day_objects[i].days[j].date);
         for(let k = 0; k < 48; k++){
-          temp_array.push(day_objects[i].days[j].time_blocks[k].activity)
+          temp_array.push(day_objects[i].days[j].time_blocks[k].activity);
         }
         data.push(temp_array);
       }
@@ -136,14 +136,14 @@ export class ExampleView extends ItemView {
 
     //table functions
 
-    let selectionActive = function(instance: any, x1: any, y1: any, x2:any, y2:any, origin:any) {
-      console.log(x1.toString() + " " + y1.toString()); 
-      //get the date
-      let date = data[y1][0];
-      console.log(date);
+    let updated = function(instance: any, cell: any, x: any, y: any, value: any){
+      let index: number = Math.floor(y/7);
+      let full_yaml = day_objects[index];
+
+      full_yaml.days[y%7].time_blocks[x-1].activity = value;
+    
+      upadteFileData(full_yaml, relevant_files[index]);
     }
-
-
 
     jspreadsheet(grid_view, {
       rowResize: false,
@@ -155,7 +155,7 @@ export class ExampleView extends ItemView {
       columns: columns,
 
       //event handlers
-      onselection: selectionActive,
+      onchange: updated,
 
     })    
 
