@@ -116,8 +116,11 @@ export class ExampleView extends ItemView {
     let data: any[][] = []; //updated by typing in the spreadsheet
     let columns = [];
 
-    for(let i = 0; i < day_objects.length; i++){
-      for(let j = 0; j < day_objects[i].days.length; j++){
+    let outer = day_objects.length;
+    let inner = day_objects[0].days.length;
+
+    for(let i = 0; i < outer; i++){
+      for(let j = 0; j < inner; j++){
         let temp_array = [];
         temp_array.push(day_objects[i].days[j].date);
         for(let k = 0; k < 48; k++){
@@ -127,7 +130,7 @@ export class ExampleView extends ItemView {
       }
     }
 
-    columns.push({ title: "Date", width: 120 });
+    columns.push({ title: "Date", width: 120, readOnly: true});
 
     for(let i = 0; i < 48; i++){
       columns.push({ title: String(i+1), width: 24 });
@@ -149,15 +152,82 @@ export class ExampleView extends ItemView {
       rowResize: false,
       columnResize: false,
       tableOverflow: true,
-      tableHeight: "1000px",
+      // lazyLoading: true,
+      // loadingSpin: true,
       
       data: data,
       columns: columns,
 
       //event handlers
       onchange: updated,
+    })  
+    
+    
+    /* -------------------------------------------------------------------------- */
+    /*                              more css styling                              */
+    /* -------------------------------------------------------------------------- */
 
-    })    
+    let main_container: any;
+    let parent: any;
+    let true_scroll = 0;
+
+    setTimeout(() => {
+      turn_off_box_shadow();
+
+      main_container = document.getElementsByClassName("jexcel_content").item(0);
+      parent = main_container.firstChild.lastChild;
+      let item_list: Element[] = Array.from(parent.childNodes); 
+
+      for(let i = item_list.length-1; i >= 0; i--){
+        let e: Element = parent.childNodes.item(i);
+        parent.removeChild(e);
+      }   
+      
+      let bottom_index: number;
+
+      for(let i = 0; i < 50; i++){
+        parent.appendChild(item_list[i]);
+        bottom_index = i;
+      }
+
+      let prev_scroll = 0;
+  
+      main_container.addEventListener("scroll", () => {
+        let top_index = Math.floor(main_container.scrollTop/20); 
+        let buffer = 2;
+
+        console.log(top_index);
+        true_scroll = true_scroll + (main_container.scrollTop - prev_scroll);
+
+        if(prev_scroll < true_scroll){
+          for(let i = 0; i < buffer; i++){
+            parent.appendChild(item_list[bottom_index + i]);
+            // if(top_index > 15){
+            //   parent.removeChild(parent.firstChild);
+            // }
+          }
+          
+          bottom_index = bottom_index + buffer - 1; //recalculate ?
+
+        }else if (prev_scroll > top_index){
+          // console.log("scrolling up");
+          //could clip list and then set 
+          
+
+          
+        }else{
+          console.log("cell not changed");
+        }
+
+        prev_scroll = main_container.scrollTop;
+
+        })
+    }, 0);
+
+
+  
+
+
 
     /* -------------------------------------------------------------------------- */
     /*                                  configure                                 */
@@ -174,14 +244,6 @@ export class ExampleView extends ItemView {
 
 
 
-
-    /* -------------------------------------------------------------------------- */
-    /*                              more css styling                              */
-    /* -------------------------------------------------------------------------- */
-    setTimeout(() => {
-      turn_off_box_shadow()
-    }, 0);
-  
   }
 
   async onClose() {

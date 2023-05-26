@@ -187,6 +187,7 @@ function generate_file_data(data_array_day: string[], data_array_week: string[],
 			return_string = yaml_append(return_string, "time", 8, false);
 			return_string = yaml_append(return_string, "activity", 8, false);
 			return_string = yaml_append(return_string, "notes", 8, false);
+			return_string = yaml_append(return_string, "colour", 8, false);
 		}
 		return_string = yaml_append(return_string, data_array_day[3], 4, false);
 
@@ -263,4 +264,12 @@ export function upadteFileData(full_yaml: any, file: TFile):void{
 export function turn_off_box_shadow(){
     let grid: any = document.getElementsByClassName("jexcel_content")[0];
 	grid.style.boxShadow = "none";
+	grid.style.maxHeight = "100%"; //controls box height but the bigger it is, the more jittery
 }
+
+
+/* -------------------------------------------------------------------------- */
+/*                                   colour                                   */
+/* -------------------------------------------------------------------------- */
+
+

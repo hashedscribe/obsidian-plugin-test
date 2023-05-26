@@ -68,9 +68,11 @@ Below is styling for the table from https://bossanova.uk/jspreadsheet/v4/jexcel.
 .jexcel_container {
     display:inline-block;
     padding-right:2px;
-    box-sizing: border-box;
+    /* box-sizing: border-box; */
     overscroll-behavior: contain;
     outline: none;
+    height: 1000px;
+    overflow: hidden;
 }
 
 .jexcel_container.fullscreen {
@@ -104,6 +106,7 @@ Below is styling for the table from https://bossanova.uk/jspreadsheet/v4/jexcel.
     position:relative;
     scrollbar-width: thin;
     scrollbar-color: #666 transparent;
+    /* overflow-y: scroll; */
 }
 
 @supports (-moz-appearance:none) {
@@ -137,7 +140,7 @@ Below is styling for the table from https://bossanova.uk/jspreadsheet/v4/jexcel.
 
     border: var(--border-width) solid transparent;
     font-size: small;
-    color: var(--text-normal);
+    color: var(--text-muted);
 }
 
 /* -------------------------------------------------------------------------- */
@@ -159,6 +162,8 @@ Below is styling for the table from https://bossanova.uk/jspreadsheet/v4/jexcel.
     position: sticky;
     top: 0;
     z-index:2;
+    color: var(--text-normal);
+
 }
 
 .jexcel_container.with-toolbar .jexcel > thead > tr > td
@@ -237,7 +242,7 @@ Below is styling for the table from https://bossanova.uk/jspreadsheet/v4/jexcel.
 
 .jexcel > tbody > tr > td.readonly
 {
-    color:rgba(0,0,0,0.3)
+    color: var(--text-muted)
 }
 .jexcel > tbody > tr.selected > td:first-child
 {
