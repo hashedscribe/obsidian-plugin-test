@@ -68,27 +68,17 @@ export class ExampleView extends ItemView {
 
     let nav_bar = container.createEl("div", {cls: "nav_bar"});
     let grid_button = nav_bar.createEl("button", {cls:"nav_button", text: "Grid"});
-    let stats_button = nav_bar.createEl("button", {cls: "nav_button", text: "Stats"});
     let configure_button = nav_bar.createEl("button", {cls: "nav_button", text: "Configure"});
 
     grid_button.addEventListener("click", e => {
       grid_view.style.display = "block";
       configure_view.style.display = "none";
-      stats_view.style.display = "none";
-
-    });
-
-    stats_button.addEventListener("click", e => {
-      grid_view.style.display = "none";
-      configure_view.style.display = "none";
-      stats_view.style.display = "block";
 
     });
 
     configure_button.addEventListener("click", e => {
       grid_view.style.display = "none";
       configure_view.style.display = "block";
-      stats_view.style.display = "none";
 
     });
 
@@ -101,9 +91,6 @@ export class ExampleView extends ItemView {
     /* -------------------------------------------------------------------------- */
 
     let activity_bar = container.createEl("div", {cls: "activity_bar"});
-
-
-
 
 
 
@@ -152,8 +139,6 @@ export class ExampleView extends ItemView {
       rowResize: false,
       columnResize: false,
       tableOverflow: true,
-      // lazyLoading: true,
-      // loadingSpin: true,
       
       data: data,
       columns: columns,
@@ -202,21 +187,13 @@ export class ExampleView extends ItemView {
         if(prev_scroll < true_scroll){
           for(let i = 0; i < buffer; i++){
             parent.appendChild(item_list[bottom_index + i]);
-            // if(top_index > 15){
-            //   parent.removeChild(parent.firstChild);
-            // }
           }
           
-          bottom_index = bottom_index + buffer - 1; //recalculate ?
-
+          bottom_index = bottom_index + buffer - 1; //recalculate 
         }else if (prev_scroll > top_index){
           // console.log("scrolling up");
           //could clip list and then set 
-          
-
-          
-        }else{
-          console.log("cell not changed");
+  
         }
 
         prev_scroll = main_container.scrollTop;

@@ -1,8 +1,24 @@
-import { Plugin, parseYaml, TFile } from 'obsidian';
+import { Plugin, parseYaml, TFile, HexString, stringifyYaml } from 'obsidian';
 import { ExampleView, VIEW_TYPE_EXAMPLE } from "./view";
 import { SettingsTab } from "./settings";
 import moment from "moment";
 import YAML from 'yaml';
+
+interface I_activity{
+	key: string;
+}
+
+class Activity{
+	key: string;
+	activity_name: string;
+	colour_hex: string;
+
+	constructor(in_key:string, in_activity_name: string, in_colour_hex:HexString){
+		this.key = in_key;
+		this.activity_name = in_activity_name;
+		this.colour_hex = in_colour_hex;
+	}
+}
 
 interface PluginSettings {
 	//configurable settings
@@ -15,7 +31,7 @@ interface PluginSettings {
 	data_fields_day: string[]
 	data_fields_week: string[]
 
-	activity_list: string[]
+	activity_list: Map<string, Activity>
 
 
 	// plugin data
@@ -264,9 +280,9 @@ export function upadteFileData(full_yaml: any, file: TFile):void{
 export function turn_off_box_shadow(){
     let grid: any = document.getElementsByClassName("jexcel_content")[0];
 	grid.style.boxShadow = "none";
-	grid.style.maxHeight = "100%"; //controls box height but the bigger it is, the more jittery
-}
+	grid.style.maxHeight = "60%"; //controls box height but the bigger it is, the more jittery
 
+}
 
 /* -------------------------------------------------------------------------- */
 /*                                   colour                                   */
