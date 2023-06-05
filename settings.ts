@@ -1,7 +1,10 @@
 import ExamplePlugin from "./main";
 import Activity from "./main";
 import { make_activity, make_field } from "./main";
-import { App, ButtonComponent, ColorComponent, PluginSettingTab, Setting, TextComponent } from "obsidian";
+import { App, ButtonComponent, ColorComponent, EditableFileView, PluginSettingTab, Setting, TextComponent } from "obsidian";
+
+
+let main_settings_view: HTMLDivElement, activity_settings_view: HTMLDivElement;
 
 export class SettingsTab extends PluginSettingTab {
     plugin: ExamplePlugin;
@@ -11,18 +14,17 @@ export class SettingsTab extends PluginSettingTab {
       this.plugin = plugin;
     }
 
+ 
+
     display(): void{
         let { containerEl } = this;
 
         containerEl.empty();
 
-        let main_settings_view = containerEl.createEl("div");
-        let activity_settings_view = containerEl.createEl("div");
+        main_settings_view = containerEl.createEl("div");
+        activity_settings_view = containerEl.createEl("div");
         
-        display_main_page(main_settings_view, this.plugin.settings, this.plugin, main_settings_view);
-
-
-        console.log(containerEl);
+        display_main_page(main_settings_view, this.plugin.settings, this.plugin);
     }
 }
 
@@ -32,7 +34,7 @@ export class SettingsTab extends PluginSettingTab {
 /*                                  main view                                 */
 /* -------------------------------------------------------------------------- */
 
-function display_main_page(containerEl: any, settings: any, plugin: any, main_container: any){
+function display_main_page(containerEl: any, settings: any, plugin: any){
     new Setting(containerEl)
     .setName("Batch add number")
     .setDesc("Number of files each batch add should create.")
@@ -75,14 +77,14 @@ function display_main_page(containerEl: any, settings: any, plugin: any, main_co
         component.setButtonText("+ Activity");
         component.onClick(e => {
             make_activity(settings);
-            display_settings(settings.activity_list[settings.activity_list.length-1], activities, settings, main_container)
+            display_settings(settings.activity_list[settings.activity_list.length-1], activities, settings)
         })
     })
 
     let activityLoop = settings.activity_list.length;
 
     for(let i = 0; i < activityLoop ; i++){
-        display_settings(settings.activity_list[i], activities, settings, main_container)
+        display_settings(settings.activity_list[i], activities, settings)
     } 
     
     new Setting(containerEl)
@@ -100,13 +102,13 @@ function display_main_page(containerEl: any, settings: any, plugin: any, main_co
 /*                            display under in main                           */
 /* -------------------------------------------------------------------------- */
 
-function display_settings(item: any, containerEl: any, settings: any, main_container: any){
+function display_settings(item: any, containerEl: any, settings: any){
     new Setting(containerEl)
     .setName("Name")
     .addButton((component: ButtonComponent) => {
         component.setButtonText("Edit");
         component.onClick(e => {
-            edit_activity(item, settings, main_container);
+            edit_activity(item, settings);
         })
     })
 }
@@ -116,8 +118,15 @@ function display_settings(item: any, containerEl: any, settings: any, main_conta
 /*                             edit activity view                             */
 /* -------------------------------------------------------------------------- */
 
-function edit_activity(item: any, settings: any, main_container: any){
-    console.log("testing jksfhg")
-    console.log(main_container)
-    main_container.style.visibility = "hidden";
+function edit_activity(item: any, settings: any){
+    main_settings_view.style.display = "none";
+    activity_settings_view.style.display = "block"
+
+    new Setting(activity_settings_view)
+    .setName("Name")
+    .addText((text) => 
+        text
+        .setValue(item.activity_name)
+    )
+
 }
