@@ -41,22 +41,34 @@ If your plugin does not need CSS, delete this file.
     border-radius: 0px;
 }
 
-.nav_bar{
-    text-align: center;
+.expand_button{
+    background-color: var(--interactive-normal);
+    margin-top: 10px;
+    font-size: medium;
+    border-radius: 0px;
 }
 
-.configure_view{
-    display: none;
+.nav_bar{
+    text-align: center;
+    display: flex;
+    justify-content: center;
 }
+
+/* .configure_view{
+    display: none;
+} */
 
 .grid_view{
     display: block;
 }
 
-.stats_view{
-    display: none;
+/* .config_side{
+    display: inline;
 }
 
+.config_main{
+    display: inline;
+} */
 /*
 Below is styling for the table from https://bossanova.uk/jspreadsheet/v4/jexcel.css with alterations
 */
@@ -486,7 +498,6 @@ Below is styling for the table from https://bossanova.uk/jspreadsheet/v4/jexcel.
   -khtml-user-drag: none;
   -moz-user-drag: none;
   -o-user-drag: none;
-  user-drag: none;
 }
 
 .jexcel_textarea
@@ -620,48 +631,6 @@ Below is styling for the table from https://bossanova.uk/jspreadsheet/v4/jexcel.
     align-items:center;
 }
 
-.jexcel_pagination
-{
-    display:flex;
-    justify-content:space-between;
-    align-items:center;
-}
-
-.jexcel_pagination > div
-{
-    display:flex;
-    padding:10px;
-}
-
-.jexcel_pagination > div:last-child
-{
-    padding-right:10px;
-    padding-top:10px;
-}
-
-.jexcel_pagination > div > div
-{
-    text-align:center;
-    width:36px;
-    height:36px;
-    line-height:34px;
-    border:1px solid #ccc;
-    box-sizing: border-box;
-    margin-left:2px;
-    cursor:pointer;
-}
-
-.jexcel_page
-{
-    font-size:0.8em;
-}
-
-.jexcel_page_selected
-{
-    font-weight:bold;
-    background-color:#f3f3f3;
-}
-
 .jexcel_toolbar
 {
     display:flex;
@@ -701,7 +670,7 @@ Below is styling for the table from https://bossanova.uk/jspreadsheet/v4/jexcel.
     border:0px;
     background-color:transparent;
     padding-right:10px;
-}
+} */
 
 .jexcel .dragging-left
 {

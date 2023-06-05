@@ -4,19 +4,22 @@ import { SettingsTab } from "./settings";
 import moment from "moment";
 import YAML from 'yaml';
 
-interface I_activity{
-	key: string;
-}
-
-class Activity{
+export class Activity{
 	key: string;
 	activity_name: string;
 	colour_hex: string;
 
-	constructor(in_key:string, in_activity_name: string, in_colour_hex:HexString){
-		this.key = in_key;
-		this.activity_name = in_activity_name;
-		this.colour_hex = in_colour_hex;
+	constructor(){
+		this.activity_name = "New Activity";
+		this.colour_hex = "#000000";
+	}
+
+	changeColour(new_hex: string){
+		this.colour_hex = new_hex;
+	}
+
+	changeActivityName(new_name: string){
+		this.activity_name = new_name;
 	}
 }
 
@@ -31,7 +34,7 @@ interface PluginSettings {
 	data_fields_day: string[]
 	data_fields_week: string[]
 
-	activity_list: Map<string, Activity>
+	activity_list: Activity[]
 
 
 	// plugin data
@@ -47,6 +50,7 @@ const DEFAULT_SETTINGS: Partial<PluginSettings> = {
 	batch_create: "31",
 	storage_folder: "/",
 	time_format: "military",
+	activity_list: [],
 
 	// plugin data
 }
@@ -288,4 +292,11 @@ export function turn_off_box_shadow(){
 /*                                   colour                                   */
 /* -------------------------------------------------------------------------- */
 
+export function make_activity(settings: any){
+	settings.activity_list.push(new Activity())
+}
 
+
+export function make_field(){
+	console.log("field made");
+}

@@ -1,6 +1,6 @@
 import { ItemView, WorkspaceLeaf, parseYaml, TFile } from "obsidian";
 import { App, PluginSettingTab, Setting } from "obsidian";
-import { text_to_yaml, turn_off_box_shadow, upadteFileData } from "./main";
+import { text_to_yaml, turn_off_box_shadow, upadteFileData, make_activity } from "./main";
 import jspreadsheet from "jspreadsheet-ce";
 import ExamplePlugin from "./main";
 
@@ -60,7 +60,7 @@ export class ExampleView extends ItemView {
 
     container.innerHTML = container.innerHTML + insertHtml;
 
-
+    
 
     /* -------------------------------------------------------------------------- */
     /*                               making nav bar                               */
@@ -68,23 +68,21 @@ export class ExampleView extends ItemView {
 
     let nav_bar = container.createEl("div", {cls: "nav_bar"});
     let grid_button = nav_bar.createEl("button", {cls:"nav_button", text: "Grid"});
-    let configure_button = nav_bar.createEl("button", {cls: "nav_button", text: "Configure"});
+    // let configure_button = nav_bar.createEl("button", {cls: "nav_button", text: "Configure"});
+    let grid_expand_button = nav_bar.createEl("button", {cls: "expand_button", text:"[ ]"});
 
     grid_button.addEventListener("click", e => {
       grid_view.style.display = "block";
-      configure_view.style.display = "none";
-
+      // configure_view.style.display = "none";
     });
 
-    configure_button.addEventListener("click", e => {
-      grid_view.style.display = "none";
-      configure_view.style.display = "block";
+    // configure_button.addEventListener("click", e => {
+    //   grid_view.style.display = "none";
+    //   configure_view.style.display = "block";
 
-    });
-
-
+    // });
+    
     let centre = container.createEl("div", {cls: "centre"});
-
 
     /* -------------------------------------------------------------------------- */
     /*                                activity bar                                */
@@ -181,7 +179,6 @@ export class ExampleView extends ItemView {
         let top_index = Math.floor(main_container.scrollTop/20); 
         let buffer = 2;
 
-        console.log(top_index);
         true_scroll = true_scroll + (main_container.scrollTop - prev_scroll);
 
         if(prev_scroll < true_scroll){
@@ -202,22 +199,17 @@ export class ExampleView extends ItemView {
     }, 0);
 
 
-  
-
-
-
     /* -------------------------------------------------------------------------- */
     /*                                  configure                                 */
     /* -------------------------------------------------------------------------- */
-    let configure_view = centre.createEl("div", {cls: "configure_view", text: "Configure settings here"});
+    // let configure_view = centre.createEl("div", {cls: "configure_view"});
+    // let side_panel = configure_view.createEl("div", {cls: "config_side"});
+    // let main_view = configure_view.createEl("div", {cls: "config_main"});
 
+    // let add_activity_button = main_view.createEl("div", {cls: "config_add", text: "Add Activity"});
+    // add_activity_button.addEventListener("click", e => {
 
-
-
-    /* -------------------------------------------------------------------------- */
-    /*                                 stats view                                 */
-    /* -------------------------------------------------------------------------- */
-    let stats_view = centre.createEl("div", {cls: "stats_view", text: "Look at statistics here"});
+    // });
 
 
 
