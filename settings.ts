@@ -122,6 +122,16 @@ function edit_activity(item: any, settings: any){
     main_settings_view.style.display = "none";
     activity_settings_view.style.display = "block"
 
+    activity_settings_view.empty();
+
+    let return_to_main = activity_settings_view.createEl("button", {text: "<"});
+
+    return_to_main.addEventListener("click", e => {
+        main_settings_view.style.display = "block";
+        activity_settings_view.style.display = "none"
+    })
+
+
     new Setting(activity_settings_view)
     .setName("Name")
     .addText((text) => 
