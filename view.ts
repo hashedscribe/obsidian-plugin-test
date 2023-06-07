@@ -95,6 +95,9 @@ export class ExampleView extends ItemView {
     let grid_view = centre.createEl("div", {cls: "grid_view"});
     let data: any[][] = []; //updated by typing in the spreadsheet
     let columns = [];
+    let prefilledx: number[] = [];
+    let prefilledy: number[] = [];
+
 
     let outer = day_objects.length;
     let inner = day_objects[0].days.length;
@@ -105,10 +108,18 @@ export class ExampleView extends ItemView {
         temp_array.push(day_objects[i].days[j].date);
         for(let k = 0; k < 48; k++){
           temp_array.push(day_objects[i].days[j].time_blocks[k].activity);
+          if(day_objects[i].days[j].time_blocks[k].activity != null && day_objects[i].days[j].time_blocks[k].activity){
+            console.log(day_objects[i].days[j].time_blocks[k].activity)
+            console.log(j)
+
+            prefilledx.push(k);
+            prefilledy.push(j);
+          }
         }
         data.push(temp_array);
       }
     }
+
 
     columns.push({ title: "Date", width: 120, readOnly: true});
 
@@ -126,8 +137,8 @@ export class ExampleView extends ItemView {
       full_yaml.days[y%7].time_blocks[x-1].activity = value;
     
       upadteFileData(full_yaml, relevant_files[index]);
-      let colour = get_colour(value, settings.activity_list);
-      table.setStyle(getColumnNameFromId([x,y]), "background", colour);
+
+      table.setStyle(getColumnNameFromId([x,y]), "background", get_colour(value, settings.activity_list));
     }
 
     let table = jspreadsheet(grid_view, {
@@ -141,6 +152,11 @@ export class ExampleView extends ItemView {
       //event handlers
       onchange: updated,
     })  
+
+
+    for(let i = 0; i < prefilledx.length; i++){
+      table.setStyle(getColumnNameFromId([prefilledx[i]+1, prefilledy[i]]), 'background', get_colour("0.4", settings.activity_list));
+    }
     
     
     /* -------------------------------------------------------------------------- */

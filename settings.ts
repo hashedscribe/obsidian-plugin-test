@@ -1,6 +1,6 @@
 import ExamplePlugin from "./main";
 import Activity from "./main";
-import { make_activity, make_field } from "./main";
+import { make_activity } from "./main";
 import { App, ButtonComponent, ColorComponent, EditableFileView, PluginSettingTab, Setting, SettingTab, TextComponent } from "obsidian";
 
 
