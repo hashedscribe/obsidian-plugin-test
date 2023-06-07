@@ -306,7 +306,9 @@ export function get_colour(key: string, activity_list: Activity[] ){
 		return e.key == key;
 	})
 
-	if(key_filter[0].colour_hex){
+	console.log()
+
+	if(key_filter.length != 0){
 		return key_filter[0].colour_hex;
 	}else{
 		return "rgba(0, 0, 0, 0)"
