@@ -300,3 +300,11 @@ export function make_activity(settings: any){
 export function make_field(){
 	console.log("field made");
 }
+
+export function get_colour(key: string, activity_list: Activity[] ){
+	let key_filter = activity_list.filter(e => {
+		return e.key == key;
+	})
+
+	return key_filter[0].colour_hex;
+}

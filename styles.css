@@ -1,13 +1,3 @@
-/*
-
-This CSS file will be included with your plugin, and
-available in the app when your plugin is enabled.
-
-If your plugin does not need CSS, delete this file.
-
-*/
-
-
 .day_row{
     font-family: "Monaco", monospace;
     padding: 10px;
@@ -54,24 +44,13 @@ If your plugin does not need CSS, delete this file.
     justify-content: center;
 }
 
-/* .configure_view{
-    display: none;
-} */
 
 .grid_view{
     display: block;
 }
 
-/* .config_side{
-    display: inline;
-}
 
-.config_main{
-    display: inline;
-} */
-/*
-Below is styling for the table from https://bossanova.uk/jspreadsheet/v4/jexcel.css with alterations
-*/
+/*Below is styling for the table from https://bossanova.uk/jspreadsheet/v4/jexcel.css with alterations*/
 
 :root {
     --jexcel-border-color: var(--background-modifier-border);
@@ -278,11 +257,6 @@ Below is styling for the table from https://bossanova.uk/jspreadsheet/v4/jexcel.
 
 
 
-
-
-
-
-
 .jexcel > tbody > tr > td > textarea
 {
     resize: none;
@@ -449,25 +423,6 @@ Below is styling for the table from https://bossanova.uk/jspreadsheet/v4/jexcel.
 {
     width:100%;
     height:auto;
-}
-
-.jexcel .editor .jexcel_richtext
-{
-    position:fixed;
-    top:100%;
-    z-index:40;
-    user-select:none;
-    -webkit-font-smoothing: antialiased;
-    font-size: .875rem;
-    letter-spacing: .2px;
-    -webkit-box-shadow: 0 8px 10px 1px rgba(0,0,0,0.14), 0 3px 14px 2px rgba(0,0,0,0.12), 0 5px 5px -3px rgba(0,0,0,0.2);
-    box-shadow: 0 8px 10px 1px rgba(0,0,0,0.14), 0 3px 14px 2px rgba(0,0,0,0.12), 0 5px 5px -3px rgba(0,0,0,0.2);
-    padding:10px;
-    background-color:#fff;
-    min-width:280px;
-    max-width:310px;
-    margin-top:2px;
-    text-align:left;
 }
 
 .jexcel .editor .jclose:after

@@ -1,7 +1,7 @@
 import { ItemView, WorkspaceLeaf, parseYaml, TFile } from "obsidian";
 import { App, PluginSettingTab, Setting } from "obsidian";
-import { text_to_yaml, turn_off_box_shadow, upadteFileData, make_activity } from "./main";
-import jspreadsheet from "jspreadsheet-ce";
+import { text_to_yaml, turn_off_box_shadow, upadteFileData, get_colour } from "./main";
+import jspreadsheet, { getColumnNameFromId } from "jspreadsheet-ce";
 import ExamplePlugin from "./main";
 
 export const VIEW_TYPE_EXAMPLE = "example-view";
@@ -30,11 +30,12 @@ export class ExampleView extends ItemView {
     let loaded_files = this.app.vault.getMarkdownFiles();
     let relevant_files: any[] = [];
     let day_objects: any[] = [];
+    let settings = this.plugin.settings
 
 
     //filter relevant files
     for(let i = 0; i < loaded_files.length; i++){
-      if("/" + loaded_files[i].parent.path + "/" == this.plugin.settings.storage_folder){
+      if("/" + loaded_files[i].parent.path + "/" == settings.storage_folder){
         relevant_files.push(loaded_files[i]);
       }
     }
@@ -73,14 +74,8 @@ export class ExampleView extends ItemView {
 
     grid_button.addEventListener("click", e => {
       grid_view.style.display = "block";
-      // configure_view.style.display = "none";
     });
 
-    // configure_button.addEventListener("click", e => {
-    //   grid_view.style.display = "none";
-    //   configure_view.style.display = "block";
-
-    // });
     
     let centre = container.createEl("div", {cls: "centre"});
 
@@ -131,9 +126,11 @@ export class ExampleView extends ItemView {
       full_yaml.days[y%7].time_blocks[x-1].activity = value;
     
       upadteFileData(full_yaml, relevant_files[index]);
+      let colour = get_colour(value, settings.activity_list);
+      table.setStyle(getColumnNameFromId([x,y]), "background", colour);
     }
 
-    jspreadsheet(grid_view, {
+    let table = jspreadsheet(grid_view, {
       rowResize: false,
       columnResize: false,
       tableOverflow: true,
@@ -197,22 +194,6 @@ export class ExampleView extends ItemView {
 
         })
     }, 0);
-
-
-    /* -------------------------------------------------------------------------- */
-    /*                                  configure                                 */
-    /* -------------------------------------------------------------------------- */
-    // let configure_view = centre.createEl("div", {cls: "configure_view"});
-    // let side_panel = configure_view.createEl("div", {cls: "config_side"});
-    // let main_view = configure_view.createEl("div", {cls: "config_main"});
-
-    // let add_activity_button = main_view.createEl("div", {cls: "config_add", text: "Add Activity"});
-    // add_activity_button.addEventListener("click", e => {
-
-    // });
-
-
-
   }
 
   async onClose() {

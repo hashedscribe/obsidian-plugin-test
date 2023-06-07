@@ -88,16 +88,17 @@ function display_main_page(settings: any, plugin: any){
         display_settings(settings.activity_list[i], activities, settings, plugin)
     } 
     
-    new Setting(main_settings_view)
-        .setHeading()
-        .setName("Fields")
-        .addButton((component: ButtonComponent) => {
-            component.setButtonText("+ Field");
-            component.onClick(e => {
-                make_field();
-            })
-        })
+    // new Setting(main_settings_view)
+    //     .setHeading()
+    //     .setName("Fields")
+    //     .addButton((component: ButtonComponent) => {
+    //         component.setButtonText("+ Field");
+    //         component.onClick(e => {
+    //             make_field();
+    //         })
+    //     })
 }
+
 
 /* -------------------------------------------------------------------------- */
 /*                            display under in main                           */
@@ -111,7 +112,7 @@ function display_settings(item: any, containerEl: any, settings: any, plugin: an
         component.onClick(e => {
             main_settings_view.empty();
             activity_settings_view.empty();
-            
+
             let return_to_main = activity_settings_view.createEl("button", {text: "<"});
 
             return_to_main.addEventListener("click", e => {
@@ -126,8 +127,34 @@ function display_settings(item: any, containerEl: any, settings: any, plugin: an
             .addText((text) => 
                 text
                 .setValue(item.activity_name)
+                .onChange(async (value) => {
+                    settings.activity_list[settings.activity_list.indexOf(item)].activity_name = value;
+                    await plugin.saveSettings();
+                })
             )
 
+            new Setting(activity_settings_view)
+            .setName("Colour")
+            .addColorPicker((component: ColorComponent) => {
+                component.setValue(item.colour_hex)
+                component.onChange(async (value) => {
+                    settings.activity_list[settings.activity_list.indexOf(item)].colour_hex = value;
+                    await plugin.saveSettings();
+                })
+            })
+
+            new Setting(activity_settings_view)
+            .setName("Grid Identifier")
+            .addText((text) => 
+                text
+                .setValue(item.key)
+                .onChange(async (value) => {
+                    settings.activity_list[settings.activity_list.indexOf(item)].key = value;
+                    await plugin.saveSettings();
+                })
+            )
+
+            
 
         })
     })
